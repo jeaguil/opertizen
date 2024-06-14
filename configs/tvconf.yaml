@@ -1,0 +1,10 @@
+properties:
+  operating_system:
+  model:
+  description:
+  smartthings_devide_id:
+  smartthings_access_token:
+
+network:
+  ip_address:
+  port:

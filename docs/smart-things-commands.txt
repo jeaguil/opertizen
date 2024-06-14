@@ -1,0 +1,36 @@
+SmartThings API: https://developer.smartthings.com/docs/api/public/#operation/executeDeviceCommands
+
+Running a command through the SmartThings API conforms to the following format:
+    smartthings devices:commands <device-id> <capability>:<command>
+
+List of capabilities through the SmartThings API.
+Each capability has a subset of commands
+────────────────────────────────────
+1   ocf
+2   switch
+3   audioVolume
+4   audioMute
+5   tvChannel
+6   mediaInputSource
+7   mediaPlayback
+8   mediaTrackControl
+9   powerConsumptionReport
+10  custom.error
+11  custom.picturemode
+12  custom.soundmode
+13  custom.accessibility
+14  custom.launchapp
+15  custom.recording
+16  custom.tvsearch
+17  custom.disabledCapabilities
+18  samsungvd.remoteControl
+19  samsungvd.ambient
+20  samsungvd.ambientContent
+21  samsungvd.mediaInputSource
+22  samsungvd.supportsFeatures
+23  samsungim.fixedFindNode
+24  samsungvd.thingStatus
+25  refresh
+26  execute
+27  samsungvd.firmwareVersion
+28  samsungvd.supportsPowerOnByOcf

@@ -1,0 +1,10 @@
+# opertizen/scripts/build_and_run_with_args.sh -runflow="./runflows/.yaml"
+
+runflow:
+  name: Power switch runflow
+  description: This runflow demonstrates an example flow of commands that can be sent to a TV
+  steps:
+    - name: Turn on TV
+      command: switch;on
+    - name: Turn off TV
+      command: switch;off

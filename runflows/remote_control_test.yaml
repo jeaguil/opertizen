@@ -1,0 +1,16 @@
+runflow:
+  name: Remote control test runflow
+  description: This runflow demonstrates an example flow of commands that can be sent to a TV
+  steps:
+    - name: Turn on TV
+      command: switch;on
+    - name: Send remote control UP
+      command: samsungvd.remoteControl;send(UP, PRESS_AND_RELEASED)
+    - name: Send remote control RIGHT
+      command: samsungvd.remoteControl;send(RIGHT, PRESSED)
+    - name: Send remote control LEFT
+      command: samsungvd.remoteControl;send(LEFT, PRESSED)
+    - name: Send remote control DOWN
+      command: samsungvd.remoteControl;send(LEFT, PRESS_AND_RELEASED)
+    - name: Turn off TV
+      command: switch;off

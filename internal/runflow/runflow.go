@@ -3,12 +3,9 @@ package runflow
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"os"
-	"slices"
-	"strings"
 	"time"
 
 	"opertizen/internal/command"
@@ -68,13 +65,14 @@ func (r *Runflow) ProcessRunflow() {
 func (r *Runflow) parseRunflowFile() ([]command.SmartThingsCommandRequest, error) {
 	var requests []command.SmartThingsCommandRequest
 	for _, step := range r.Runflow.Steps {
-		cap, cmd, err := checkForCommand(step.Command)
+		cap, cmd, args, err := command.CheckCommandFromRunflow(step.Command)
 		if err != nil {
 			log.Fatal(err)
 		}
 		smartThingsCommand := command.SmartThingsCommand{
 			Capability: cap,
 			Command:    cmd,
+			Arguments:  args,
 		}
 		request := command.SmartThingsCommandRequest{
 			Commands: []command.SmartThingsCommand{smartThingsCommand},
@@ -83,19 +81,4 @@ func (r *Runflow) parseRunflowFile() ([]command.SmartThingsCommandRequest, error
 	}
 	log.Println("Successfully parsed runflow file.")
 	return requests, nil
-}
-
-func checkForCommand(commandStr string) (string, string, error) {
-	var cap string
-	var cmd string
-	splitCmd := strings.Split(commandStr, ";")
-	if _, ok := command.Capabilities[splitCmd[0]]; ok {
-		cap = splitCmd[0]
-		if slices.Contains(command.Capabilities[splitCmd[0]], splitCmd[1]) {
-			cmd = splitCmd[1]
-		}
-	} else {
-		return "", "", errors.New("Cannot find supported command in runflow: " + commandStr)
-	}
-	return cap, cmd, nil
 }

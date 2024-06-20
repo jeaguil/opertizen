@@ -21,6 +21,9 @@ func main() {
 			log.Fatalf("Failed to load runflow: %v", err)
 		}
 		runflow.ProcessRunflow()
+	} else {
+		log.Println("No runflow file passed in as argument. Skipping runflow execution.")
+		log.Println("Consider running with a runflow file.")
 	}
 
 	log.Println("Closing opertizen.")

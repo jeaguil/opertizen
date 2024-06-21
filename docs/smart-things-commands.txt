@@ -3,7 +3,7 @@ SmartThings API: https://developer.smartthings.com/docs/api/public/#operation/ex
 Running a command through the SmartThings API conforms to the following format:
     smartthings devices:commands <device-id> <capability>:<command>
 
-List of capabilities through the SmartThings API.
+List of case-sensitive capabilities through the SmartThings API.
 Each capability has a subset of commands
 ────────────────────────────────────
 1   ocf
@@ -33,4 +33,35 @@ Each capability has a subset of commands
 25  refresh
 26  execute
 27  samsungvd.firmwareVersion
+28  samsungvd.supportsPowerOnByOcf
+
+List of case-sensitive commands for each capability
+────────────────────────────────────
+1   ocf: [postOcfCommand]
+2   switch: [on, off]
+3   audioVolume: [setVolume, volumeDown, volumeUp]
+4   audioMute: [mute, setMute, unmute]
+5   tvChannel: [channelDown, channelUp, setTvChannel, setTvChannelName]
+6   mediaInputSource: [setInputSource]
+7   mediaPlayback: [fastForward, pause, play, rewind, setPlaybackStatus, stop]
+8   mediaTrackControl: [nextTrack, previousTrack]
+9   powerConsumptionReport
+10  custom.error: [setError]
+11  custom.picturemode: [setPictureMode]
+12  custom.soundmode: [setSoundMode]
+13  custom.accessibility: [setAccessibility]
+14  custom.launchapp: [launchApp]
+15  custom.recording: [recordStart, recordStop]
+16  custom.tvsearch: [search]
+17  custom.disabledCapabilities
+18  samsungvd.remoteControl: [send]
+19  samsungvd.ambient: [setAmbientOn, setAmbientContent]
+20  samsungvd.ambientContent: [setAmbientContent]
+21  samsungvd.mediaInputSource: [setInputSource]
+22  samsungvd.supportsFeatures
+23  samsungim.fixedFindNode: [refresh]
+24  samsungvd.thingStatus
+25  refresh: [refresh]
+26  execute: [execute]
+27  samsungvd.firmwareVersion: [setFirmwareVersion]
 28  samsungvd.supportsPowerOnByOcf

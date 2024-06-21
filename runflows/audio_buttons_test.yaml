@@ -1,8 +1,6 @@
-# opertizen/scripts/build_and_run_with_args.sh -runflow="./runflows/audio_buttons_test.yaml"
-
 runflow:
   name: Power switch runflow
-  description: This runflow demonstrates an example flow of commands that can be sent to a TV
+  description: This runflow demonstrates an test flow of audio commands that can be sent to a TV
   steps:
     - name: Turn on TV
       command: switch;on
@@ -10,5 +8,15 @@ runflow:
       command: audioMute;mute
     - name: Unmute TV
       command: audioMute;unmute
+    - name: Turn up TV
+      command: audioVolume;volumeUp
+    - name: Turn up TV
+      command: audioVolume;volumeUp
+    - name: Set volume
+      command: audioVolume;setVolume(10)
+    - name: Turn down TV
+      command: audioVolume;volumeDown
+    - name: Turn down TV
+      command: audioVolume;volumeDown
     - name: Turn off TV
       command: switch;off

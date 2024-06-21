@@ -11,6 +11,6 @@ runflow:
     - name: Send remote control LEFT
       command: samsungvd.remoteControl;send(LEFT, PRESSED)
     - name: Send remote control DOWN
-      command: samsungvd.remoteControl;send(LEFT, PRESS_AND_RELEASED)
+      command: samsungvd.remoteControl;send(DOWN, PRESS_AND_RELEASED)
     - name: Turn off TV
       command: switch;off

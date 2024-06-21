@@ -39,34 +39,41 @@ type SmartThingsCommandRequest struct {
 // CheckCommandFromRunflow checks if a command is supported by Opertizen.
 // If a capability or command is not found, returns error
 // indicating a command cannot be processed.
-func CheckCommandFromRunflow(commandStr string) (string, string, []string, error) {
-	var cap string
-	var cmd string
-	var args []string
+func CheckCommandFromRunflow(commandStr string) bool {
 	splitCmd := strings.Split(commandStr, ";")
 	if len(splitCmd) == 2 {
-		capa := splitCmd[0]
-		comm := splitCmd[1]
-		if _, ok := capabilities[capa]; ok {
-			cap = capa
-
-			openParenIndex := strings.Index(comm, "(")
+		cap := splitCmd[0]
+		cmd := splitCmd[1]
+		if _, ok := capabilities[cap]; ok {
+			openParenIndex := strings.Index(cmd, "(")
 			if openParenIndex > 0 {
-				args = parseArguments(cap, comm)
-				comm = comm[:openParenIndex]
+				cmd = cmd[:openParenIndex]
 			}
-
-			if slices.Contains(capabilities[cap], comm) {
-				cmd = comm
+			if !slices.Contains(capabilities[cap], cmd) {
+				return false
 			}
 		} else {
-			return "", "", nil, errors.New("Cannot find supported command in runflow: " + commandStr)
+			return false
 		}
 	} else {
-		return "", "", nil, errors.New("Invalid format or unsupported command in runflow file:\ncommand:<capability>;<command>(<arguments>): " + commandStr)
+		return false
 	}
-	log.Println(cap, cmd, args)
-	return cap, cmd, args, nil
+	return true
+}
+
+// ConstructSmartThingsRequest constructs a command suitable for the SmartThings API
+func ConstructSmartThingsRequest(commandStr string) SmartThingsCommand {
+	var request SmartThingsCommand
+	splitCmd := strings.Split(commandStr, ";")
+	capadability := splitCmd[0]
+	command := splitCmd[1]
+	request.Capability = splitCmd[0]
+	request.Command = splitCmd[1]
+	openParenIndex := strings.Index(command, "(")
+	if openParenIndex > 0 {
+		request.Arguments = parseArguments(capadability, command)
+	}
+	return request
 }
 
 func parseArguments(capability, command string) []string {

@@ -41,6 +41,7 @@ func LoadRunflow(file string) (Runflow, error) {
 	return runflow, err
 }
 
+// ProcessRunFlow attempts to process a runflow file
 func (r *Runflow) ProcessRunflow() {
 	reqs, err := r.parseRunflowFile()
 	if err != nil {
@@ -65,19 +66,15 @@ func (r *Runflow) ProcessRunflow() {
 func (r *Runflow) parseRunflowFile() ([]command.SmartThingsCommandRequest, error) {
 	var requests []command.SmartThingsCommandRequest
 	for _, step := range r.Runflow.Steps {
-		cap, cmd, args, err := command.CheckCommandFromRunflow(step.Command)
-		if err != nil {
-			log.Fatal(err)
+		if command.CheckCommandFromRunflow(step.Command) {
+			smartThingsCommand := command.ConstructSmartThingsRequest(step.Command)
+			request := command.SmartThingsCommandRequest{
+				Commands: []command.SmartThingsCommand{smartThingsCommand},
+			}
+			requests = append(requests, request)
+		} else {
+			log.Fatalf("Malformed command. Command does not exists or is not supported: %v", step.Command)
 		}
-		smartThingsCommand := command.SmartThingsCommand{
-			Capability: cap,
-			Command:    cmd,
-			Arguments:  args,
-		}
-		request := command.SmartThingsCommandRequest{
-			Commands: []command.SmartThingsCommand{smartThingsCommand},
-		}
-		requests = append(requests, request)
 	}
 	log.Println("Successfully parsed runflow file.")
 	return requests, nil

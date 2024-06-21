@@ -5,13 +5,14 @@ import (
 	"log"
 	"regexp"
 	"slices"
+	"strconv"
 	"strings"
 )
 
 // Capabilities is the current list of supported capabilities from SmartThings API
 var capabilities = map[string][]string{
 	"switch":                  {"on", "off"},
-	"audioVolume":             {"volumeDown", "volumnUp"},
+	"audioVolume":             {"volumeDown", "volumeUp", "setVolume"},
 	"audioMute":               {"mute", "unmute"},
 	"samsungvd.remoteControl": {"send"},
 }
@@ -27,9 +28,9 @@ var SamsungvdRemoteControl = map[string][]string{
 
 // SmartThingsCommand defines the structure for a command through the SmartThings API
 type SmartThingsCommand struct {
-	Capability string   `json:"capability"`
-	Command    string   `json:"command"`
-	Arguments  []string `json:"arguments"`
+	Capability string        `json:"capability"`
+	Command    string        `json:"command"`
+	Arguments  []interface{} `json:"arguments"`
 }
 
 type SmartThingsCommandRequest struct {
@@ -67,28 +68,21 @@ func ConstructSmartThingsRequest(commandStr string) SmartThingsCommand {
 	splitCmd := strings.Split(commandStr, ";")
 	capadability := splitCmd[0]
 	command := splitCmd[1]
-	request.Capability = splitCmd[0]
-	request.Command = splitCmd[1]
 	openParenIndex := strings.Index(command, "(")
 	if openParenIndex > 0 {
-		request.Arguments = parseArguments(capadability, command)
+		var err error
+		request.Arguments, err = parseArguments(command)
+		if err != nil {
+			log.Fatal(err)
+		}
+		command = command[:openParenIndex]
 	}
+	request.Capability = capadability
+	request.Command = command
 	return request
 }
 
-func parseArguments(capability, command string) []string {
-	var args []string
-	var err error
-	if strings.Compare(capability, "samsungvd.remoteControl") == 0 {
-		args, err = constructSamsungvdRemoteControlRequest(command)
-		if err != nil {
-			log.Fatalf("Error during parsing arguments for a command: %v", command)
-		}
-	}
-	return args
-}
-
-func constructSamsungvdRemoteControlRequest(command string) ([]string, error) {
+func parseArguments(command string) ([]interface{}, error) {
 	re := regexp.MustCompile(`\w+\(([^)]+)\)`)
 	matches := re.FindStringSubmatch(command)
 	if len(matches) < 2 {
@@ -96,9 +90,15 @@ func constructSamsungvdRemoteControlRequest(command string) ([]string, error) {
 	}
 
 	args := strings.Split(matches[1], ",")
-	for i := range args {
-		args[i] = strings.TrimSpace(args[i])
+	var processedArgs []interface{}
+	for _, arg := range args {
+		arg = strings.TrimSpace(arg)
+		if intArg, err := strconv.Atoi(arg); err == nil {
+			processedArgs = append(processedArgs, intArg)
+		} else {
+			processedArgs = append(processedArgs, arg)
+		}
 	}
 
-	return args, nil
+	return processedArgs, nil
 }

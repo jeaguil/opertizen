@@ -36,7 +36,7 @@ $ opertizen/scripts/build_and_run_with_args.sh -runflow=<runflow_file>
 | Capability              | Command                          | 
 |-------------------------|----------------------------------|
 | switch                  | on/off                           |
-| audioVolume             | volumnDown/volumeUp/setVolume    |
+| audioVolume             | volumeDown/volumeUp/setVolume    |
 | audioMute               | mute/unmute                      |
 | samsungvd.remoteControl | send                             |
 

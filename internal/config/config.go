@@ -28,11 +28,6 @@ type Configuration struct {
 		SmartThingsDeviceID    string `yaml:"smartthings_devide_id"`
 		SmartThingsAccessToken string `yaml:"smartthings_access_token"`
 	} `yaml:"properties"`
-
-	Network struct {
-		IPAddress string `yaml:"ip_address"`
-		Port      int    `yaml:"port"`
-	} `yaml:"network"`
 }
 
 func LoadConfig(filepath string) (*Configuration, error) {
